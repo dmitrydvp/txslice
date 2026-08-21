@@ -51,26 +51,6 @@ func randString(n int) string {
 }
 
 func NewSomeSlice(countItems int) []*some {
-	// // Чтобы структура была реально большой — генерим большие срезы строк
-	// images := make([]string, 1000)
-	// for i := range images {
-	// 	images[i] = randString(256) // ~256 байт на строку
-	// }
-
-	// boxes := make([][]string, 50)
-	// for i := range boxes {
-	// 	row := make([]string, 100)
-	// 	for j := range row {
-	// 		row[j] = randString(128) // ~128 байт
-	// 	}
-	// 	boxes[i] = row
-	// }
-
-	// childs := make([]int64, 5000)
-	// for i := range childs {
-	// 	childs[i] = rand.Int63()
-	// }
-
 	res := make([]*some, countItems)
 
 	for i := range res {
@@ -111,7 +91,6 @@ func NewSomeSlice(countItems int) []*some {
 }
 
 func NewSome() *some {
-	// Чтобы структура была реально большой — генерим большие срезы строк
 	images := make([]string, 1000)
 	for i := range images {
 		images[i] = randString(256) // ~256 байт на строку
