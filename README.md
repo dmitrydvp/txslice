@@ -3,7 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/d1m4ek1/txslice.svg)](https://pkg.go.dev/github.com/d1m4ek1/txslice)
 [![Go Report Card](https://goreportcard.com/badge/github.com/d1m4ek1/txslice)](https://goreportcard.com/report/github.com/d1m4ek1/txslice)
 
-A **transactional slice** library for Go with undo/redo support, snapshots, batch operations, and optional indexing — all with minimal allocations and high performance.
+A **transactional slice** library for Go with undo/redo support, batch operations, and optional indexing — all with minimal allocations and high performance.
 
 ⚠️ **Note:** This library is currently in active development. The API is not stable and may change.
 
@@ -18,21 +18,19 @@ Expect breaking changes until version **v1.0.0.**
 Sometimes you need **database-like transactions** but don’t want the overhead of a real DB.  
 `txslice` provides an **in-memory transactional layer** for slices, making it easy to:
 
--   Apply changes and rollback safely.
--   Maintain historical states via snapshots.
--   Perform bulk operations with atomic commits.
--   Use indexing for O(1) lookups by arbitrary keys.
--   Build undo/redo systems or high-load pipelines.
+- Apply changes and rollback safely.
+- Perform bulk operations with atomic commits.
+- Use indexing for O(1) lookups by arbitrary keys.
+- Build undo/redo systems or high-load pipelines.
 
 ## Features
 
--   **Transactions** — commit or rollback any change.
--   **Undo / Redo** — revert single or batch operations.
--   **Batch operations** — group multiple changes into one transaction.
--   **Snapshots with versioning** — save/restore slice states by tag.
--   **Indexing** — fast lookup by custom key extractor.
--   **Thread-safety** — built-in `sync.RWMutex` for concurrent access.
--   **Minimal allocations** — efficient memory usage even with millions of ops.
+- **Transactions** — commit or rollback any change.
+- **Undo / Redo** — revert single or batch operations.
+- **Batch operations** — group multiple changes into one transaction.
+- **Indexing** — fast lookup by custom key extractor.
+- **Thread-safety** — built-in `sync.RWMutex` for concurrent access.
+- **Minimal allocations** — efficient memory usage even with millions of ops.
 
 ## Installation
 
@@ -67,8 +65,6 @@ func main() {
 
 	fmt.Println("First element:", *tx.FirstElement()) // {1}
 
-	// Create a snapshot
-	tx.SetSnapshot("v1")
 
 	// Commit example
 	tx.Commit()
@@ -157,11 +153,11 @@ func main() {
 
 txslice is designed for high-load scenarios:
 
--   Minimal copying (lazy snapshots, journal-based rollback).
+- Minimal copying (journal-based rollback).
 
--   Optimized for millions of iterations.
+- Optimized for millions of iterations.
 
--   Especially useful in route optimization, in-memory caching, undo/redo stacks.
+- Especially useful in route optimization, in-memory caching, undo/redo stacks.
 
 **_Benchmarks coming soon._**
 
