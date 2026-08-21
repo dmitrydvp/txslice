@@ -19,9 +19,6 @@ func main() {
 
 	fmt.Println("First element:", *tx.FirstElement()) // {1}
 
-	// Create a snapshot
-	tx.SetSnapshot("v1")
-
 	// Commit example
 	tx.Commit()
 
