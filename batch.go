@@ -31,6 +31,8 @@ func (t *TxSlice[T]) BatchAccept() {
 		return
 	}
 
+	t.IndexWait()
+
 	t.batchParent.data = t.data
 	t.batchParent.pushJournal(&operation[T]{
 		typ:    batch,
@@ -38,6 +40,8 @@ func (t *TxSlice[T]) BatchAccept() {
 	})
 
 	t.Commit()
+
+	t.batchParent = nil
 }
 
 func (t *TxSlice[T]) UndoBatch() {

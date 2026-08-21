@@ -6,29 +6,29 @@ import (
 	"time"
 )
 
-type Some struct {
+type some struct {
 	ID     string
 	Name   string
 	Images []string
 
 	Status uint8
 
-	SomeChild SomeChild
+	someChild someChild
 
-	User User
+	user user
 }
 
-type User struct {
+type user struct {
 	ID        string
 	FirstName string
 	LastName  string
 	Email     string
 	Childs    []int64
 
-	SomeChild SomeChild
+	someChild someChild
 }
 
-type SomeChild struct {
+type someChild struct {
 	ID     string
 	Status uint64
 
@@ -50,8 +50,8 @@ func randString(n int) string {
 	return string(b)
 }
 
-func NewSomeSlice(countItems int) []*Some {
-	// Чтобы структура была реально большой — генерим большие срезы строк
+func NewSomeSlice(countItems int) []*some {
+	// // Чтобы структура была реально большой — генерим большие срезы строк
 	// images := make([]string, 1000)
 	// for i := range images {
 	// 	images[i] = randString(256) // ~256 байт на строку
@@ -71,15 +71,15 @@ func NewSomeSlice(countItems int) []*Some {
 	// 	childs[i] = rand.Int63()
 	// }
 
-	res := make([]*Some, countItems)
+	res := make([]*some, countItems)
 
 	for i := range res {
-		res[i] = &Some{
+		res[i] = &some{
 			ID:     strconv.FormatInt(time.Now().UnixNano(), 36),
 			Name:   randString(6),
 			Images: nil,
 			Status: uint8(rand.Intn(255)),
-			SomeChild: SomeChild{
+			someChild: someChild{
 				ID:     strconv.FormatInt(time.Now().UnixNano(), 36),
 				Status: rand.Uint64(),
 				Boxes:  nil,
@@ -88,13 +88,13 @@ func NewSomeSlice(countItems int) []*Some {
 					Y: rand.Int63(),
 				},
 			},
-			User: User{
+			user: user{
 				ID:        strconv.FormatInt(time.Now().UnixNano(), 36),
 				FirstName: randString(6),
 				LastName:  randString(6),
 				Email:     randString(12),
 				Childs:    nil,
-				SomeChild: SomeChild{
+				someChild: someChild{
 					ID:     strconv.FormatInt(time.Now().UnixNano(), 36),
 					Status: rand.Uint64(),
 					Boxes:  nil,
@@ -110,7 +110,7 @@ func NewSomeSlice(countItems int) []*Some {
 	return res
 }
 
-func NewSome() *Some {
+func NewSome() *some {
 	// Чтобы структура была реально большой — генерим большие срезы строк
 	images := make([]string, 1000)
 	for i := range images {
@@ -131,12 +131,12 @@ func NewSome() *Some {
 		childs[i] = rand.Int63()
 	}
 
-	return &Some{
+	return &some{
 		ID:     strconv.FormatInt(time.Now().UnixNano(), 36),
 		Name:   randString(64),
 		Images: images,
 		Status: uint8(rand.Intn(255)),
-		SomeChild: SomeChild{
+		someChild: someChild{
 			ID:     strconv.FormatInt(time.Now().UnixNano(), 36),
 			Status: rand.Uint64(),
 			Boxes:  boxes,
@@ -145,13 +145,13 @@ func NewSome() *Some {
 				Y: rand.Int63(),
 			},
 		},
-		User: User{
+		user: user{
 			ID:        strconv.FormatInt(time.Now().UnixNano(), 36),
 			FirstName: randString(32),
 			LastName:  randString(32),
 			Email:     randString(64),
 			Childs:    childs,
-			SomeChild: SomeChild{
+			someChild: someChild{
 				ID:     strconv.FormatInt(time.Now().UnixNano(), 36),
 				Status: rand.Uint64(),
 				Boxes:  boxes,

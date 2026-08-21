@@ -2,42 +2,29 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"time"
-	"unsafe"
 
-	"txslice"
+	"github.com/d1m4ek1/txslice"
 )
 
+type Values struct {
+	Val int
+}
+
 func main() {
-	t := NewSomeSlice(1_0)
+	tx := txslice.New([]*Values{}, txslice.Config{})
 
-	sizeBytes := len(t) * int(unsafe.Sizeof(t[0]))
+	// Push elements
+	tx.Push(&Values{1})
+	tx.Push(&Values{2})
 
-	sizeMB := float64(sizeBytes) / 1024 / 1024
-	fmt.Printf("Size: %.6f MB\n", sizeMB)
+	fmt.Println("First element:", *tx.FirstElement()) // {1}
 
-	timeStart := time.Now()
+	// Commit example
+	tx.Commit()
 
-	tx := txslice.New(t, txslice.Config{
-		IsAutoLatestSnap: true,
-	})
+	// Transaction with rollback
+	tx.Push(&Values{3})
+	tx.Rollback() // rollback last transaction
 
-	if err := tx.Batch(func(b *txslice.TxSlice[Some]) error {
-		g := NewSomeSlice(1_0)
-
-		for _, item := range g {
-			b.Push(item)
-		}
-
-		return nil
-	}); err != nil {
-		log.Fatal(err)
-	}
-
-	tx.Rollback()
-
-	fmt.Println(time.Since(timeStart))
-
-	fmt.Println(tx.Len() == len(t), tx.Len(), len(t))
+	fmt.Println("Length after rollback:", tx.Len()) // 2
 }
