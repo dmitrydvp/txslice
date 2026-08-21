@@ -15,7 +15,6 @@ type TxSlice[T any] struct {
 	journal     []*operation[T] // журнал изменений с точным описанием обратных действий
 	journalCap  int
 	journalStep int
-	snaps       *snapshotData[T] // данные для snapshot'ов (последний + карта версионных)
 
 	batchParent *TxSlice[T]
 }
@@ -38,18 +37,7 @@ func New[T any](data []*T, cfg Config) *TxSlice[T] {
 		journal:     newJournal[T](journalInitialCap),
 		journalCap:  journalInitialCap,
 		journalStep: journalCapStep,
-		snaps: &snapshotData[T]{
-			isAutoLatestSnap: cfg.IsAutoLatestSnap,
-		},
 	}
-}
-
-func (t *TxSlice[T]) SetSnapshot(version string) {
-	t.snaps.setSnapshot(version, t.data)
-}
-
-func (t *TxSlice[T]) GetSnapshot(version string) []*T {
-	return t.snaps.getSnapshot(version)
 }
 
 func (t *TxSlice[T]) Commit() {
@@ -57,10 +45,6 @@ func (t *TxSlice[T]) Commit() {
 	copy(res, t.data)
 
 	t.data = res
-
-	if t.snaps.isAutoLatestSnap {
-		t.snaps.setSnapshot("", t.data)
-	}
 
 	t.journal = newJournal[T](16)
 }
@@ -111,10 +95,6 @@ func (t *TxSlice[T]) Rollback() {
 		fmt.Printf(tempLog, indexFromBegin, op.typ, opMethod, t.Len())
 	}
 
-	if t.snaps.isAutoLatestSnap {
-		t.snaps.setSnapshot("", t.data)
-	}
-
 	t.journal = newJournal[T](16)
 }
 
@@ -160,10 +140,6 @@ func (t *TxSlice[T]) batchRollback(op *operation[T], parentIndex int) {
 		}
 
 		fmt.Printf("%d->\tOperation index: %d; operation type: %d - %s; slice length: %d;\n", parentIndex, indexFromBegin, nestedOp.typ, opMethod, t.Len())
-	}
-
-	if t.snaps.isAutoLatestSnap {
-		t.snaps.setSnapshot("", t.data)
 	}
 
 	t.journal = newJournal[T](16)

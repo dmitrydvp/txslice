@@ -4,7 +4,6 @@ import "fmt"
 
 func (t *TxSlice[T]) BatchStart() *TxSlice[T] {
 	b := New(t.data, Config{
-		IsAutoLatestSnap:    t.snaps.isAutoLatestSnap,
 		JournalCapacity:     t.journalCap,
 		JournalCapacityStep: t.journalStep,
 	})
